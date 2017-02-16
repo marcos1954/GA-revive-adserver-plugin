@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml-stylesheet type="text/xsl" href=""?>
+
+<plugin>
+    <name>markAnalyticsPluginForRevive</name>
+    <creationDate>2017-02-15</creationDate>
+    <author>Mark Page</author>
+    <authorEmail>mark@gayguidevallarta.com</authorEmail>
+    <authorUrl>http://www.gayguidevallarta.com</authorUrl>
+    <license>All copy rights reserved @ reviveadserverplugin.com</license>
+    <description>Google Analytics Plugin For Revive Adserver.</description>
+    <version>1.0.0</version>
+    <type>package</type>
+
+    <install>
+        <files>
+            <file path="{PLUGINPATH}">markAnalyticsPluginForRevive.readme.txt</file>
+        </files>
+        <contents>
+            <group name="markAnalytics">0</group>
+        </contents>
+    </install>
+</plugin>
+

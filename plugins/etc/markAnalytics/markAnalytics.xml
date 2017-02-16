@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml-stylesheet type="text/xsl" href=""?>
+<plugin>
+	<name>markAnalytics</name>
+	<creationDate>2017-02-15</creationDate>
+	<author>Mark Page</author>
+	<authorEmail>mark@gayguidevallarta.com</authorEmail>
+	<authorUrl>http://www.gayguidevallarta.com</authorUrl>
+	<license></license>
+	<description>Google Analytics Plugin For Revive Adserver.</description>
+	<version>1.0.0</version>
+	<extends>deliveryAdRender</extends>
+	<install>
+		<files>
+			<file path="{MODULEPATH}deliveryAdRender/markAnalytics/">markAnalytics.delivery.php</file>
+		</files>
+		<configuration>
+			<setting key="analyticid"     type="text"     label="GoogleAnalytics ID"        required="1" size="32" visible="1">UA-45882599-1</setting>
+			<setting key="bannerSize"     type="checkbox" label="Include Banner Size"       required="1" size="1"  visible="1">1</setting>
+			<setting key="displayCatName" type="text"     label="Event Category Name"       required="1" size="32" visible="1">Banner</setting>
+			<setting key="trackDisplay"   type="checkbox" label="Track Banner Display"      required="1" size="1"  visible="1">1</setting>
+			<setting key="displayAction"  type="text"     label="Event Action for Display"  required="1" size="32" visible="1">Display</setting>
+			<setting key="trackClick"     type="checkbox" label="Track Banner Click"        required="1" size="1"  visible="1">1</setting>
+			<setting key="clickAction"    type="text"     label="Event Click Action"        required="1" size="32" visible="1">BannerClick</setting>
+		</configuration>
+		<components>
+			<component>
+				<name>markAnalytics</name>
+				<hook>postAdRender</hook>
+			</component>
+		</components>
+	</install>
+</plugin>
