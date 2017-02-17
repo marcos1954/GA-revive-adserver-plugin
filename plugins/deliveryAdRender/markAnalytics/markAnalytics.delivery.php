@@ -5,7 +5,7 @@ MAX_Dal_Delivery_Include();
 function Plugin_deliveryAdRender_markAnalytics_markAnalytics_Delivery_postAdRender(&$code, $aBanner)
 {
 	$base = $GLOBALS['_MAX']['CONF']['markAnalytics'];
-	if( ($base['analyticid'] == 'UA-45882599-1') || (!$base['trackClick'] && !$base['trackDisplay']))
+	if( ($base['analyticid'] == '') || (!$base['trackClick'] && !$base['trackDisplay']))
 		return;
 	
 	$url = $aBanner['url'];
