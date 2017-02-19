@@ -10,11 +10,21 @@ function Plugin_deliveryAdRender_markAnalytics_markAnalytics_Delivery_postAdRend
 	
 	$url = $aBanner['url'];
 	$id = $base['analyticid'];
-	$category = addslashes($base['displayCatName']);
-	$actionDisplay = addslashes($base['displayAction']);
-	$actionClick = addslashes($base['clickAction']);
-	$label = addslashes($aBanner['name']).(($base['bannerSize'])?(' '.$aBanner['width']).'x'.($aBanner['height']):'');				
 
+	// text fields used as Category, Event Action, and Event Label for events sent to GA
+	// these are configured in plugin settings
+	//
+	$categoryImpression = addslashes($base['impressionCatName']);
+	$actionImpression = addslashes($base['impressionAction']);
+	
+	$categoryClick = addslashes($base['clickCatName']);
+	$actionClick = addslashes($base['clickAction']);
+	
+	$label = addslashes($aBanner['name']).( ($base['bannerSize']) ? (' '.$aBanner['width']).'x'.($aBanner['height']) : '');
+
+	// script to be inserted in postAdRender.  Loads analytics.js and initializes tracker if needed.
+	// if plugin is configured to track impressions, sends impression GA event after initialization. 
+	//
 	$aGcode = "
 		<script>
 		if (typeof ga == 'undefined') {
@@ -22,17 +32,19 @@ function Plugin_deliveryAdRender_markAnalytics_markAnalytics_Delivery_postAdRend
 		ga('create', '".$id."', 'auto');
 		}
 		";
-		
 	if ($base['trackDisplay']) {
-		$aGcode .= "ga('send', 'event', '$category', '$actionDisplay', '$label', {'transport': 'beacon', nonInteraction: true});";
+		$aGcode .= "ga('send', 'event', '$categoryImpression', '$actionImpression', '$label', {'transport': 'beacon', nonInteraction: true});";
 	}
 	$aGcode .= "</script>" ;
 
-	// add onclick ga event to anchor html element, ga callback navigates to new page
+	// splice onclick javascript for ga event into anchor html element already in $code.
+	// the GA callback navigates to new page.  using this callback assures event will be sent before
+	// navigating to banner click url
+	//
 	if ($base['trackClick'])
 	{
 		$search = 'target=';
-		$replace = "onclick=\" ga('send', 'event', '$category', '$actionClick', '$label',{'transport':'beacon','hitCallback':function(){window.open('$url',target='_blank');}}); return false; \"   target=";
+		$replace = "onclick=\" ga('send', 'event', '$categoryClick', '$actionClick', '$label',{'transport':'beacon','hitCallback':function(){window.open('$url',target='_blank');}}); return false; \"   target=";
 		$code = str_replace($search, $replace, $code);
 	}
 	

@@ -17,7 +17,7 @@
             <file path="{PLUGINPATH}">markAnalyticsPluginForRevive.readme.txt</file>
         </files>
         <contents>
-            <group name="markAnalytics">0</group>
+            <group name="markAnalytics">markAnalytics</group>
         </contents>
     </install>
 </plugin>
