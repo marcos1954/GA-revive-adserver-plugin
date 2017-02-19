@@ -43,6 +43,8 @@ function Plugin_deliveryAdRender_markAnalytics_markAnalytics_Delivery_postAdRend
 	//
 	if ($base['trackClick'])
 	{
+		$target = get_string_between($code, 'target=\'', '\'');
+		
 		$search = 'target=';
 		$replace = "onclick=\" ga('send', 'event', '$categoryClick', '$actionClick', '$label',{'transport':'beacon','hitCallback':function(){window.open('$url',target='_blank');}}); return false; \"   target=";
 		$code = str_replace($search, $replace, $code);
@@ -50,3 +52,13 @@ function Plugin_deliveryAdRender_markAnalytics_markAnalytics_Delivery_postAdRend
 	
 	$code = $code.$aGcode; 
 }
+
+function get_string_between($string, $start, $end){
+    $string = ' ' . $string;
+    $ini = strpos($string, $start);
+    if ($ini == 0) return '';
+    $ini += strlen($start);
+    $len = strpos($string, $end, $ini) - $ini;
+    return substr($string, $ini, $len);
+}
+
