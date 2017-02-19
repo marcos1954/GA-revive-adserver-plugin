@@ -46,7 +46,7 @@ function Plugin_deliveryAdRender_markAnalytics_markAnalytics_Delivery_postAdRend
 		$target = get_string_between($code, 'target=\'', '\'');
 		
 		$search = 'target=';
-		$replace = "onclick=\" ga('send', 'event', '$categoryClick', '$actionClick', '$label',{'transport':'beacon','hitCallback':function(){window.open('$url',target='_blank');}}); return false; \"   target=";
+		$replace = "onclick=\" ga('send', 'event', '$categoryClick', '$actionClick', '$label',{'transport':'beacon','hitCallback':function(){window.open('$url',target='$target');}}); return false; \"   target=";
 		$code = str_replace($search, $replace, $code);
 	}
 	
