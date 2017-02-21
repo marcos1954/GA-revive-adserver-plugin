@@ -3,26 +3,26 @@
 MAX_Dal_Delivery_Include();
 
 function Plugin_deliveryAdRender_GoogleAnalytics_GoogleAnalytics_Delivery_postAdRender(&$code, $aBanner) {
-	$base = $GLOBALS['_MAX']['CONF']['GoogleAnalytics'];
+	$conf = $GLOBALS['_MAX']['CONF']['GoogleAnalytics'];
 	
 	// if no GA id has been set we can't do anything
 	// also if no track options are set in plugin settings, do nothing
 	//
-	if( ($base['analyticid'] == '') || (!$base['trackClick'] && !$base['trackDisplay']) )
+	if( ($conf['analyticid'] == '') || (!$conf['trackClick'] && !$conf['trackDisplay']) )
 		return;
 
 	$url = $aBanner['url'];		// click destination url for this banner
-	$id = $base['analyticid'];	// Google Analytics ID from plugin settings
+	$id = $conf['analyticid'];	// Google Analytics ID from plugin settings
 
 	// text fields used as Category, Event Action, and Event Label for events sent to GA
 	// these are configured in plugin settings
 	//
-	$categoryImpression = addslashes($base['impressionCatName']);
-	$actionImpression = addslashes($base['impressionAction']);
-	$categoryClick = addslashes($base['clickCatName']);
-	$actionClick = addslashes($base['clickAction']);
+	$categoryImpression = addslashes($conf['impressionCatName']);
+	$actionImpression = addslashes($conf['impressionAction']);
+	$categoryClick = addslashes($conf['clickCatName']);
+	$actionClick = addslashes($conf['clickAction']);
 
-	$label = addslashes($aBanner['name']).( ($base['bannerSize']) ? (' '.$aBanner['width']).'x'.($aBanner['height']) : '');
+	$label = addslashes($aBanner['name']).( ($conf['bannerSize']) ? (' '.$aBanner['width']).'x'.($aBanner['height']) : '');
 
 	// Build $aGcode script to be inserted in postAdRender.  Load standard GA analytics.js and initializes tracker if needed.
 	// If plugin is configured to track impressions, send impression GA event after initialization. 
@@ -34,7 +34,7 @@ function Plugin_deliveryAdRender_GoogleAnalytics_GoogleAnalytics_Delivery_postAd
 			ga('create', '".$id."', 'auto');
 		}
 		";
-	if ($base['trackDisplay']) {
+	if ($conf['trackDisplay']) {
 		$aGcode .= "ga('send', 'event', '$categoryImpression', '$actionImpression', '$label',"
 			." {'transport': 'beacon', nonInteraction: true});";
 	}
@@ -44,11 +44,14 @@ function Plugin_deliveryAdRender_GoogleAnalytics_GoogleAnalytics_Delivery_postAd
 	// the "GA event send" callback navigates to new page.  Using a callback assures
 	// that the event will be sent before navigating away from page
 	//
-	if ($base['trackClick']) {
+	if ($conf['trackClick']) {
 		$target = get_string_between($code, 'target=\'', '\'');
 		$search = 'target=';
-		$replace = "onclick=\" ga('send', 'event', '$categoryClick', '$actionClick', '$label',"
-			."{'transport':'beacon','hitCallback':function(){window.open('$url',target='$target');}}); return false; \"   target=";
+		$replace = "onclick=\""
+			." ga('send','event','$categoryClick','$actionClick','$label',"
+			."{'transport':'beacon','hitCallback':function(){window.open('$url',target='$target');}});"
+			."return false; \" "
+			."target=";
 		
 		$code = str_replace($search, $replace, $code);
 	}
