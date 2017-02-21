@@ -24,8 +24,8 @@ function Plugin_deliveryAdRender_GoogleAnalytics_GoogleAnalytics_Delivery_postAd
 
 	$label = addslashes($aBanner['name']).( ($base['bannerSize']) ? (' '.$aBanner['width']).'x'.($aBanner['height']) : '');
 
-	// build script to be inserted in postAdRender.  Loads analytics.js and initializes tracker if needed.
-	// if plugin is configured to track impressions, sends impression GA event after initialization. 
+	// Build $aGcode script to be inserted in postAdRender.  Load standard GA analytics.js and initializes tracker if needed.
+	// If plugin is configured to track impressions, send impression GA event after initialization. 
 	//
 	$aGcode = "
 		<script>
@@ -35,18 +35,20 @@ function Plugin_deliveryAdRender_GoogleAnalytics_GoogleAnalytics_Delivery_postAd
 		}
 		";
 	if ($base['trackDisplay']) {
-		$aGcode .= "ga('send', 'event', '$categoryImpression', '$actionImpression', '$label', {'transport': 'beacon', nonInteraction: true});";
+		$aGcode .= "ga('send', 'event', '$categoryImpression', '$actionImpression', '$label',"
+			." {'transport': 'beacon', nonInteraction: true});";
 	}
 	$aGcode .= "</script>" ;
 
-	// splice onclick javascript for GA event into html anchor element already in $code.
-	// the GA event send callback navigates to new page.  using the callback assures
+	// Splice onclick javascript for GA event into html link element already in $code.
+	// the "GA event send" callback navigates to new page.  Using a callback assures
 	// that the event will be sent before navigating away from page
 	//
 	if ($base['trackClick']) {
 		$target = get_string_between($code, 'target=\'', '\'');
 		$search = 'target=';
-		$replace = "onclick=\" ga('send', 'event', '$categoryClick', '$actionClick', '$label', {'transport':'beacon','hitCallback':function(){window.open('$url',target='$target');}}); return false; \"   target=";
+		$replace = "onclick=\" ga('send', 'event', '$categoryClick', '$actionClick', '$label',"
+			."{'transport':'beacon','hitCallback':function(){window.open('$url',target='$target');}}); return false; \"   target=";
 		
 		$code = str_replace($search, $replace, $code);
 	}
